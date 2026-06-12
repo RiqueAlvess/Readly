@@ -501,9 +501,10 @@ export default function SocialPage() {
       <button
         onClick={() => setComposerOpen(true)}
         aria-label="Nova publicação"
-        className="fixed bottom-24 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-2xl text-on-primary shadow-glow transition active:scale-95"
+        className="fixed bottom-28 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-on-primary shadow-lg transition active:scale-95"
+        style={{ boxShadow: "0 4px 24px rgba(212,168,156,0.4)" }}
       >
-        +
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
       </button>
 
       {/* comments modal */}

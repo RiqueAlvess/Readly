@@ -7,7 +7,10 @@ import type { Profile } from "@/types";
 
 export function TopBar({ profile }: { profile: Profile | null }) {
   return (
-    <header className="sticky top-0 z-30 -mx-4 mb-4 flex items-center justify-between bg-background/80 px-4 py-3 backdrop-blur-xl">
+    <header
+      className="sticky top-0 z-30 -mx-4 mb-4 flex items-center justify-between bg-background/80 px-4 py-3 backdrop-blur-xl"
+      style={{ paddingTop: "max(env(safe-area-inset-top), 12px)" }}
+    >
       <Link href="/app/perfil">
         <Avatar src={profile?.avatar_url} name={profile?.full_name} size={40} />
       </Link>

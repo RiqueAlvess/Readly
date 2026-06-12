@@ -17,7 +17,10 @@ export function BottomNav() {
   const path = usePathname();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-3 pb-[env(safe-area-inset-bottom)]">
+    <nav
+      className="fixed inset-x-0 bottom-0 z-40 flex justify-center px-3"
+      style={{ paddingBottom: "max(env(safe-area-inset-bottom), 8px)" }}
+    >
       <div
         className="mb-3 flex w-full max-w-lg items-center justify-around rounded-[28px] px-2 py-2"
         style={{

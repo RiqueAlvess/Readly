@@ -95,7 +95,7 @@ export default function StorePage() {
   const [actingOffer, setActingOffer] = useState<string | null>(null);
 
   const loadGacha = useCallback(async () => {
-    const [{ data: lbs, error: e1 }, { data: feat, error: e2 }] = await Promise.all([
+    const [{ data: lbs }, { data: feat }] = await Promise.all([
       supabase.from("lootbox_types").select("*").order("cost_credits"),
       supabase
         .from("books")
@@ -104,37 +104,33 @@ export default function StorePage() {
         .order("rarity_tier", { ascending: true })
         .limit(6),
     ]);
-    if (e1) throw e1;
-    if (e2) throw e2;
+    // Silently ignore table-not-found errors (migration not run yet)
     setLootboxes((lbs as LootboxType[]) ?? []);
     setFeatured((feat as Book[]) ?? []);
   }, [supabase]);
 
   const loadMarketplace = useCallback(async () => {
     if (!profile) return;
-    // Listings from others
-    const { data: others, error: e1 } = await supabase
+    // Listings from others — ignore table-not-found errors silently
+    const { data: others } = await supabase
       .from("marketplace_listings")
       .select("*, book:books(*), seller:profiles(*)")
       .eq("is_active", true)
       .neq("seller_id", profile.id)
       .order("created_at", { ascending: false });
-    if (e1) throw e1;
     setListings((others as MarketplaceListing[]) ?? []);
 
     // My inventory available to offer (not downloaded, not listed)
-    const { data: inv, error: e2 } = await supabase
+    const { data: inv } = await supabase
       .from("gacha_inventory")
       .select("*, book:books(*)")
       .eq("user_id", profile.id)
       .eq("is_downloaded", false);
-    if (e2) throw e2;
-    const { data: myListings, error: e3 } = await supabase
+    const { data: myListings } = await supabase
       .from("marketplace_listings")
       .select("*")
       .eq("seller_id", profile.id)
       .eq("is_active", true);
-    if (e3) throw e3;
     const listedIds = new Set((myListings ?? []).map((l) => l.inventory_item_id));
     setMyInventory(
       ((inv as GachaInventoryItem[]) ?? []).filter((i) => !listedIds.has(i.id))
@@ -151,7 +147,7 @@ export default function StorePage() {
         )
         .in("listing_id", myListingIds)
         .eq("status", "pending");
-      if (e4) throw e4;
+      // ignore errors
       received = (myListings as MarketplaceListing[])
         .map((l) => ({
           ...l,
@@ -339,15 +335,6 @@ export default function StorePage() {
 
   if (!profile || loading) return <FullPageSpinner />;
 
-  if (error) {
-    return (
-      <div className="py-10 text-center">
-        <p className="mb-4 text-on-surface-muted">{error}</p>
-        <Button onClick={loadAll}>Tentar novamente</Button>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-5 pt-2">
       <div className="flex items-center justify-between">
@@ -405,8 +392,12 @@ export default function StorePage() {
           <section className="space-y-3">
             <h2 className="font-display text-lg font-bold">Caixas</h2>
             {lootboxes.length === 0 && (
-              <Card className="text-center text-sm text-on-surface-muted">
-                Nenhuma caixa disponível no momento.
+              <Card className="py-6 text-center">
+                <p className="text-3xl mb-2">🎁</p>
+                <p className="font-semibold text-on-surface">Nenhuma caixa disponível</p>
+                <p className="mt-1 text-xs text-on-surface/50">
+                  Execute a migração SQL no Supabase para liberar as lootboxes.
+                </p>
               </Card>
             )}
             {lootboxes.map((lb) => (

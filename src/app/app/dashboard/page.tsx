@@ -424,7 +424,30 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* 8. Social feed preview */}
+      {/* 8. Quick links */}
+      <section>
+        <h2 className="mb-3 font-display text-lg font-bold text-on-surface">Explorar</h2>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { href: "/app/campeonato", label: "Campeonatos", icon: "🏆", sub: "Compita e ganhe prêmios" },
+            { href: "/app/explore",    label: "Explorar",    icon: "🔍", sub: "Descubra leitores" },
+            { href: "/app/conquistas", label: "Conquistas",  icon: "🥇", sub: "Seus emblemas" },
+            { href: "/app/colecoes",   label: "Coleções",    icon: "📁", sub: "Organize seus livros" },
+          ].map((it) => (
+            <Link key={it.href} href={it.href}>
+              <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-surface p-4 active:scale-95 transition-transform">
+                <span className="text-2xl">{it.icon}</span>
+                <div className="min-w-0">
+                  <p className="text-sm font-bold text-on-surface">{it.label}</p>
+                  <p className="text-xs text-on-surface/50">{it.sub}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* 9. Social feed preview */}
       <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-display text-lg font-bold text-on-surface">

@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
@@ -170,12 +171,17 @@ export default function EstantePage() {
 
       {/* 3. Grid */}
       {filtered.length === 0 ? (
-        <div className="neu-card mt-4 flex flex-col items-center gap-2 p-8 text-center">
-          <p className="text-3xl">📚</p>
-          <p className="text-sm text-on-surface-muted">
+        <div className="mt-4 flex flex-col items-center gap-3 rounded-2xl border border-white/5 bg-surface p-10 text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
+            <Plus size={28} className="text-primary" strokeWidth={1.5} />
+          </div>
+          <p className="font-semibold text-on-surface">
+            {library.length === 0 ? "Estante vazia" : "Nenhum resultado"}
+          </p>
+          <p className="text-sm text-on-surface/50">
             {library.length === 0
-              ? "Sua estante está vazia. Adicione seu primeiro livro!"
-              : "Nenhum livro encontrado com esses filtros."}
+              ? "Toque no + para adicionar seu primeiro livro."
+              : "Tente outro filtro ou busca."}
           </p>
         </div>
       ) : (
@@ -205,10 +211,11 @@ export default function EstantePage() {
       {/* 4. Floating add button */}
       <button
         onClick={() => setModalOpen(true)}
-        className="fixed bottom-24 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-2xl text-on-primary shadow-neu active:scale-95"
+        className="fixed bottom-28 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-on-primary shadow-lg active:scale-95 transition-transform"
+        style={{ boxShadow: "0 4px 24px rgba(212,168,156,0.4)" }}
         aria-label="Adicionar livro"
       >
-        +
+        <Plus size={24} strokeWidth={2.5} />
       </button>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Adicionar Livro">
