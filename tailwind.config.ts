@@ -76,7 +76,7 @@ const config: Config = {
           "60%": { transform: "scale(1.1) rotate(5deg)", opacity: "1" },
           "100%": { transform: "scale(1) rotate(0)", opacity: "1" },
         },
-        pulse-glow: {
+        "pulse-glow": {
           "0%,100%": { boxShadow: "0 0 14px rgba(212,168,156,0.4)" },
           "50%": { boxShadow: "0 0 28px rgba(212,168,156,0.8)" },
         },
