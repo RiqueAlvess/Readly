@@ -1,0 +1,23 @@
+{
+  "name": "Readly — Sua estante social",
+  "short_name": "Readly",
+  "description": "Acompanhe leituras, ganhe XP e suba de rank com a comunidade Readly.",
+  "start_url": "/app/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1F2D26",
+  "theme_color": "#1F2D26",
+  "lang": "pt-BR",
+  "categories": ["books", "social", "lifestyle"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Estante", "url": "/app/estante" },
+    { "name": "Loja", "url": "/app/store" },
+    { "name": "Social", "url": "/app/social" }
+  ]
+}
