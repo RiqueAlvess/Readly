@@ -219,7 +219,9 @@ export default function DashboardPage() {
     if (!topGenres.some((t) => t.genre === g)) topGenres.push({ genre: g, count: 0 });
   }
 
-  if (!profile || loading) return <FullPageSpinner />;
+  // Show spinner only on first load; if profile is unavailable render empty state
+  if (loading && !profile) return <FullPageSpinner />;
+  if (!profile) return null;
 
   const firstName = (profile.full_name || profile.username || "Leitor").split(/\s+/)[0];
   const annualGoal = profile.annual_goal || 0;
