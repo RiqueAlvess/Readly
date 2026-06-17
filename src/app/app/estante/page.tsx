@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Heart } from "lucide-react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
@@ -201,7 +201,9 @@ export default function EstantePage() {
                 </Badge>
               </div>
               {ub.is_favorite && (
-                <span className="absolute right-1 top-1 text-sm drop-shadow">❤️</span>
+                <span className="absolute right-1 top-1 drop-shadow">
+                  <Heart size={14} className="fill-red-400 text-red-400" strokeWidth={2} />
+                </span>
               )}
             </div>
           ))}

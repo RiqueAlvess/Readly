@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
+import { Library } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useToast } from "@/lib/hooks/useToast";
 
@@ -98,8 +99,8 @@ export default function LoginPage() {
       <div className="mx-auto w-full max-w-sm">
         {/* Logo / cabeçalho */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/15 text-5xl">
-            📚
+          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/15">
+            <Library size={40} className="text-primary" strokeWidth={1.5} />
           </div>
           <h1 className="text-3xl font-bold text-on-surface">
             {mode === "login" ? "Bem-vindo de volta" : "Crie sua conta"}

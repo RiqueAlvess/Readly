@@ -18,6 +18,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
 import { Avatar } from "@/components/ui/Avatar";
 import { FullPageSpinner, Spinner } from "@/components/ui/Spinner";
+import { Coins, Gift } from "lucide-react";
 import { BookCover } from "@/components/books/BookCover";
 import { GachaReveal } from "@/components/gamification/GachaReveal";
 import type {
@@ -340,7 +341,8 @@ export default function StorePage() {
       <div className="flex items-center justify-between">
         <h1 className="font-display text-2xl font-bold">Loja</h1>
         <div className="flex items-center gap-1.5 rounded-full bg-surface-light px-3 py-1.5 text-sm font-bold">
-          💰 {profile.credits}
+          <Coins size={15} className="text-primary" strokeWidth={2} />
+          {profile.credits}
         </div>
       </div>
 
@@ -393,7 +395,9 @@ export default function StorePage() {
             <h2 className="font-display text-lg font-bold">Caixas</h2>
             {lootboxes.length === 0 && (
               <Card className="py-6 text-center">
-                <p className="text-3xl mb-2">🎁</p>
+                <div className="flex justify-center mb-2">
+                  <Gift size={32} className="text-on-surface-muted" strokeWidth={1.5} />
+                </div>
                 <p className="font-semibold text-on-surface">Nenhuma caixa disponível</p>
                 <p className="mt-1 text-xs text-on-surface/50">
                   Execute a migração SQL no Supabase para liberar as lootboxes.
@@ -402,7 +406,7 @@ export default function StorePage() {
             )}
             {lootboxes.map((lb) => (
               <Card key={lb.id} className="flex gap-4">
-                <div className="text-4xl">{lb.icon || "🎁"}</div>
+                <div className="text-4xl">{lb.icon || <Gift size={40} className="text-primary" strokeWidth={1.2} />}</div>
                 <div className="min-w-0 flex-1">
                   <h3 className="font-display font-bold">{lb.name}</h3>
                   {lb.description && (
@@ -420,7 +424,10 @@ export default function StorePage() {
                     </Badge>
                   </div>
                   <div className="mt-3 flex items-center justify-between">
-                    <span className="text-sm font-bold">💰 {lb.cost_credits}</span>
+                    <span className="flex items-center gap-1 text-sm font-bold">
+                      <Coins size={13} className="text-primary" strokeWidth={2} />
+                      {lb.cost_credits}
+                    </span>
                     <Button
                       size="sm"
                       loading={opening === lb.id}

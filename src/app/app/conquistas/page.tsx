@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
+import { Lock, Medal } from "lucide-react";
 import { timeAgo } from "@/lib/utils/format";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -155,14 +156,16 @@ export default function ConquistasPage() {
               }
             >
               {!b.earned && (
-                <div className="absolute right-2 top-2 text-lg">🔒</div>
+                <div className="absolute right-2 top-2">
+                  <Lock size={16} className="text-on-surface-muted" strokeWidth={2} />
+                </div>
               )}
               {b.equipped && (
                 <div className="absolute left-2 top-2">
                   <Badge color="#E0B341">Equipado</Badge>
                 </div>
               )}
-              <div className="text-4xl">{b.icon || "🏅"}</div>
+              <div className="text-4xl">{b.icon || <Medal size={40} className="text-primary" strokeWidth={1.2} />}</div>
               <p className="text-sm font-bold">{b.name}</p>
               <p className="text-[11px] text-on-surface-muted">
                 {b.earned ? b.description : conditionLabel(b)}

@@ -9,7 +9,7 @@ import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
 import { getRankForXP, rankProgress } from "@/lib/constants";
 import { formatXP } from "@/lib/utils/format";
-import { BookCheck, FileText, Star, PenLine } from "lucide-react";
+import { BookCheck, FileText, Star, PenLine, Lock, CreditCard, Share2, Settings2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Modal } from "@/components/ui/Modal";
@@ -327,7 +327,7 @@ export default function PerfilPage() {
                     ub?.equipped && "ring-2 ring-primary"
                   )}
                 >
-                  <span className="text-2xl">{unlocked ? b.icon : "🔒"}</span>
+                  <span className="text-2xl">{unlocked ? b.icon : <Lock size={22} className="text-on-surface-muted" strokeWidth={2} />}</span>
                   <span className="line-clamp-2 text-[11px] font-semibold text-on-surface">
                     {b.name}
                   </span>
@@ -379,7 +379,7 @@ export default function PerfilPage() {
               </p>
             )}
           </div>
-          <span className="text-2xl">💳</span>
+          <CreditCard size={24} className="text-primary" strokeWidth={1.5} />
         </div>
         <Link href="/subscription">
           <Button variant="secondary" fullWidth>
@@ -390,14 +390,16 @@ export default function PerfilPage() {
 
       {/* share */}
       <Button variant="secondary" fullWidth onClick={() => setShareOpen(true)}>
-        📤 Compartilhar perfil
+        <Share2 size={16} strokeWidth={2} />
+        Compartilhar perfil
       </Button>
 
       {/* admin */}
       {profile.is_admin && (
         <Link href="/admin">
           <Button variant="ghost" fullWidth>
-            🛠️ Painel de administração
+            <Settings2 size={16} strokeWidth={2} />
+            Painel de administração
           </Button>
         </Link>
       )}

@@ -1,5 +1,6 @@
 "use client";
 
+import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 interface Props {
@@ -30,7 +31,7 @@ export function StreakTracker({ current, longest }: Props) {
     <div className="neu-card p-5">
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="animate-flame text-2xl">🔥</span>
+          <Flame size={24} className="animate-flame text-orange-400" strokeWidth={2} />
           <div>
             <p className="font-display text-xl font-bold">{current} dias</p>
             <p className="text-xs text-on-surface-muted">Sequência atual</p>
@@ -55,7 +56,7 @@ export function StreakTracker({ current, longest }: Props) {
                     : "neu-inset text-on-surface-muted"
                 )}
               >
-                {on ? "🔥" : ""}
+                {on && <Flame size={16} className="text-on-primary" strokeWidth={2} />}
               </div>
               <span className="text-[10px] text-on-surface-muted">{label}</span>
             </div>

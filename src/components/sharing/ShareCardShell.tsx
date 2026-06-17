@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef } from "react";
+import { Share2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 interface Props {
@@ -61,7 +62,8 @@ export function ShareCardShell({ children, fileName = "readly-card.png" }: Props
     <div className="flex flex-col items-center gap-4">
       <div ref={ref}>{children}</div>
       <Button onClick={handleShare} fullWidth>
-        📤 Compartilhar
+        <Share2 size={16} strokeWidth={2} />
+        Compartilhar
       </Button>
     </div>
   );
