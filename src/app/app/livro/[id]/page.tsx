@@ -14,6 +14,7 @@ import { ProgressBar } from "@/components/ui/ProgressBar";
 import { StarRating } from "@/components/ui/StarRating";
 import { Badge } from "@/components/ui/Badge";
 import { FullPageSpinner } from "@/components/ui/Spinner";
+import { Search, Heart, Share2 } from "lucide-react";
 import { BookCover } from "@/components/books/BookCover";
 import { ShareCardShell } from "@/components/sharing/ShareCardShell";
 import { BookFinishedCard } from "@/components/sharing/BookFinishedCard";
@@ -347,7 +348,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
   if (!book) {
     return (
       <div className="flex flex-col items-center gap-4 py-20 text-center">
-        <div className="text-5xl">🔍</div>
+        <Search size={48} className="text-on-surface-muted" strokeWidth={1.2} />
         <p className="text-on-surface-muted">Livro não encontrado.</p>
         <Button variant="secondary" onClick={() => router.push("/app/estante")}>
           Voltar à estante
@@ -449,7 +450,11 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
             onClick={toggleFavorite}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-surface-light px-4 py-3 text-sm font-semibold shadow-neu transition active:scale-[0.98]"
           >
-            <span className="text-xl">{userBook.is_favorite ? "❤️" : "🤍"}</span>
+            <Heart
+              size={20}
+              className={userBook.is_favorite ? "fill-red-400 text-red-400" : "text-on-surface-muted"}
+              strokeWidth={2}
+            />
             {userBook.is_favorite ? "Favorito" : "Favoritar"}
           </button>
         </>
@@ -508,7 +513,8 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
       {/* Actions */}
       <div className="space-y-3">
         <Button fullWidth variant="secondary" onClick={() => setShareOpen(true)}>
-          📤 Compartilhar conquista
+          <Share2 size={16} strokeWidth={2} />
+          Compartilhar conquista
         </Button>
         {userBook && (
           <Button

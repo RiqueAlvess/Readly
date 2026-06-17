@@ -15,6 +15,7 @@ import { Modal } from "@/components/ui/Modal";
 import { Badge } from "@/components/ui/Badge";
 import { FullPageSpinner, Spinner } from "@/components/ui/Spinner";
 import { Avatar } from "@/components/ui/Avatar";
+import { Trophy, Eye, Heart, MessageCircle, Link2 } from "lucide-react";
 import { BookCover } from "@/components/books/BookCover";
 import type { Post, PostComment, Book, Championship } from "@/types";
 
@@ -337,7 +338,7 @@ export default function SocialPage() {
         <Link href="/app/campeonato">
           <div className="animate-pulse-glow rounded-2xl bg-primary/20 p-4 shadow-glow ring-1 ring-primary/40">
             <div className="flex items-center gap-3">
-              <span className="text-2xl">🏆</span>
+              <Trophy size={22} className="text-primary shrink-0" strokeWidth={1.5} />
               <div className="flex-1">
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                   Campeonato ao vivo
@@ -385,7 +386,7 @@ export default function SocialPage() {
         <Card className="text-center text-on-surface-muted">
           {tab === "seguindo" ? (
             <div className="space-y-2">
-              <p className="text-3xl">👀</p>
+              <Eye size={32} className="mx-auto text-on-surface-muted" strokeWidth={1.5} />
               <p>Você ainda não segue ninguém.</p>
               <Button variant="secondary" size="sm" onClick={() => setTab("explorar")}>
                 Explorar a comunidade
@@ -472,23 +473,25 @@ export default function SocialPage() {
                     disabled={likeBusy.has(post.id)}
                     className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 transition hover:bg-white/5 active:scale-95"
                   >
-                    <span className={post.liked_by_me ? "text-red-400" : ""}>
-                      {post.liked_by_me ? "❤️" : "🤍"}
-                    </span>
+                    <Heart
+                      size={15}
+                      className={post.liked_by_me ? "fill-red-400 text-red-400" : "text-on-surface-muted"}
+                      strokeWidth={2}
+                    />
                     <span>{post.likes_count ?? 0}</span>
                   </button>
                   <button
                     onClick={() => openComments(post)}
                     className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 transition hover:bg-white/5 active:scale-95"
                   >
-                    <span>💬</span>
+                    <MessageCircle size={15} className="text-on-surface-muted" strokeWidth={2} />
                     <span>{post.comments_count ?? 0}</span>
                   </button>
                   <button
                     onClick={() => sharePost(post)}
                     className="ml-auto flex items-center gap-1.5 rounded-xl px-3 py-1.5 transition hover:bg-white/5 active:scale-95"
                   >
-                    <span>🔗</span>
+                    <Link2 size={15} className="text-on-surface-muted" strokeWidth={2} />
                   </button>
                 </div>
               </Card>

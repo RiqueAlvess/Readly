@@ -13,6 +13,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Avatar } from "@/components/ui/Avatar";
 import { FullPageSpinner } from "@/components/ui/Spinner";
+import { TrendingUp, Star, Users, Trophy, Medal, Award } from "lucide-react";
 import { BookCover } from "@/components/books/BookCover";
 import type { Book, Profile, Championship } from "@/types";
 
@@ -143,7 +144,9 @@ export default function ExplorePage() {
 
       {/* Trending */}
       <section>
-        <h2 className="mb-2 font-display text-lg font-bold">📈 Em alta</h2>
+        <h2 className="mb-2 flex items-center gap-2 font-display text-lg font-bold">
+          <TrendingUp size={20} className="text-primary" strokeWidth={1.5} /> Em alta
+        </h2>
         {trending.length === 0 ? (
           <Card className="text-center text-sm text-on-surface-muted">
             Nenhum livro em destaque ainda.
@@ -154,8 +157,9 @@ export default function ExplorePage() {
               <Link key={b.id} href={`/app/livro/${b.id}`} className="w-28 shrink-0">
                 <BookCover url={b.cover_url} title={b.title} author={b.author} />
                 <p className="mt-1 truncate text-xs font-semibold">{b.title}</p>
-                <p className="text-[11px] text-on-surface-muted">
-                  ⭐ {b.rating_avg.toFixed(1)}
+                <p className="flex items-center gap-0.5 text-[11px] text-on-surface-muted">
+                  <Star size={11} className="fill-amber-400 text-amber-400" />
+                  {b.rating_avg.toFixed(1)}
                 </p>
               </Link>
             ))}
@@ -165,7 +169,9 @@ export default function ExplorePage() {
 
       {/* Reader suggestions */}
       <section>
-        <h2 className="mb-2 font-display text-lg font-bold">👥 Leitores para seguir</h2>
+        <h2 className="mb-2 flex items-center gap-2 font-display text-lg font-bold">
+          <Users size={20} className="text-primary" strokeWidth={1.5} /> Leitores para seguir
+        </h2>
         {suggestions.length === 0 ? (
           <Card className="text-center text-sm text-on-surface-muted">
             Nenhuma sugestão no momento.
@@ -203,7 +209,9 @@ export default function ExplorePage() {
 
       {/* Active championships */}
       <section>
-        <h2 className="mb-2 font-display text-lg font-bold">🏆 Campeonatos ativos</h2>
+        <h2 className="mb-2 flex items-center gap-2 font-display text-lg font-bold">
+          <Trophy size={20} className="text-primary" strokeWidth={1.5} /> Campeonatos ativos
+        </h2>
         {championships.length === 0 ? (
           <Card className="text-center text-sm text-on-surface-muted">
             Nenhum campeonato ativo agora.
@@ -216,8 +224,9 @@ export default function ExplorePage() {
                   <div className="min-w-0">
                     <p className="truncate font-bold">{c.title}</p>
                     {c.prize_description && (
-                      <p className="truncate text-xs text-on-surface-muted">
-                        🏅 {c.prize_description}
+                      <p className="flex items-center gap-1 truncate text-xs text-on-surface-muted">
+                        <Medal size={12} className="shrink-0 text-primary" strokeWidth={2} />
+                        {c.prize_description}
                       </p>
                     )}
                   </div>
@@ -231,7 +240,9 @@ export default function ExplorePage() {
 
       {/* Leaderboard */}
       <section>
-        <h2 className="mb-2 font-display text-lg font-bold">🥇 Top leitores</h2>
+        <h2 className="mb-2 flex items-center gap-2 font-display text-lg font-bold">
+          <Award size={20} className="text-primary" strokeWidth={1.5} /> Top leitores
+        </h2>
         {leaderboard.length === 0 ? (
           <Card className="text-center text-sm text-on-surface-muted">
             Sem dados de ranking ainda.

@@ -1,10 +1,11 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
+import { Flame, Clock, Flag, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -150,10 +151,10 @@ export default function CampeonatoPage() {
   const selected = championships.find((c) => c.id === selectedId) ?? null;
   const myEntry = participants.find((p) => p.user_id === profile.id);
 
-  const sections: { key: Status; label: string; emoji: string }[] = [
-    { key: "active", label: "Ativos", emoji: "🔥" },
-    { key: "upcoming", label: "Em breve", emoji: "⏳" },
-    { key: "ended", label: "Encerrados", emoji: "🏁" },
+  const sections: { key: Status; label: string; Icon: React.ElementType }[] = [
+    { key: "active", label: "Ativos", Icon: Flame },
+    { key: "upcoming", label: "Em breve", Icon: Clock },
+    { key: "ended", label: "Encerrados", Icon: Flag },
   ];
 
   return (
@@ -166,11 +167,12 @@ export default function CampeonatoPage() {
         </Card>
       )}
 
-      {sections.map(({ key, label, emoji }) =>
+      {sections.map(({ key, label, Icon }) =>
         grouped[key].length === 0 ? null : (
           <section key={key} className="space-y-2">
-            <h2 className="font-display text-lg font-bold">
-              {emoji} {label}
+            <h2 className="flex items-center gap-2 font-display text-lg font-bold">
+              <Icon size={20} className="text-primary" strokeWidth={1.5} />
+              {label}
             </h2>
             {grouped[key].map((c) => {
               const joined = joinedIds.has(c.id);
@@ -201,7 +203,8 @@ export default function CampeonatoPage() {
 
                   {key === "active" && c.prize_description && (
                     <div className="rounded-xl bg-surface-light p-2 text-sm">
-                      🏆 <span className="font-semibold">Prêmio:</span>{" "}
+                      <Trophy size={14} className="inline text-primary" strokeWidth={2} />
+                    {" "}<span className="font-semibold">Prêmio:</span>{" "}
                       {c.prize_description}
                     </div>
                   )}

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
+import { Package } from "lucide-react";
 import { RARITY } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -158,7 +159,7 @@ export default function InventoryPage() {
 
       {items.length === 0 ? (
         <Card className="space-y-3 text-center">
-          <div className="text-5xl">📦</div>
+          <Package size={48} className="text-on-surface-muted" strokeWidth={1.2} />
           <p className="text-sm text-on-surface-muted">
             Seu inventário está vazio. Abra caixas para ganhar livros!
           </p>

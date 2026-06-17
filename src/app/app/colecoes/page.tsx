@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
+import { Layers } from "lucide-react";
 import { awardXP } from "@/lib/gamification";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -187,7 +188,7 @@ export default function CollectionsPage() {
 
       {collections.length === 0 ? (
         <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 text-center">
-          <div className="text-5xl">🗂️</div>
+          <Layers size={48} className="text-on-surface-muted" strokeWidth={1.2} />
           <p className="text-on-surface-muted">
             Você ainda não tem coleções.
             <br />

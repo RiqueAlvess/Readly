@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { FullPageSpinner } from "@/components/ui/Spinner";
 import { Avatar } from "@/components/ui/Avatar";
+import { BookOpen, Shuffle, Trophy, Search, Award, FolderOpen, Heart } from "lucide-react";
 import { BookCover } from "@/components/books/BookCover";
 import { StreakTracker } from "@/components/gamification/StreakTracker";
 import { RankDisplay } from "@/components/gamification/RankDisplay";
@@ -343,7 +344,7 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="neu-card flex flex-col items-center gap-2 p-6 text-center">
-            <p className="text-3xl">📖</p>
+            <BookOpen size={32} className="text-primary" strokeWidth={1.5} />
             <p className="text-sm text-on-surface-muted">
               Você não está lendo nenhum livro agora.
             </p>
@@ -399,7 +400,8 @@ export default function DashboardPage() {
           </div>
         ) : (
           <Button variant="secondary" fullWidth onClick={drawBook}>
-            🎲 Sortear da lista &ldquo;Quero Ler&rdquo;
+            <Shuffle size={16} strokeWidth={2} />
+            Sortear da lista &ldquo;Quero Ler&rdquo;
           </Button>
         )}
       </section>
@@ -429,14 +431,14 @@ export default function DashboardPage() {
         <h2 className="mb-3 font-display text-lg font-bold text-on-surface">Explorar</h2>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { href: "/app/campeonato", label: "Campeonatos", icon: "🏆", sub: "Compita e ganhe prêmios" },
-            { href: "/app/explore",    label: "Explorar",    icon: "🔍", sub: "Descubra leitores" },
-            { href: "/app/conquistas", label: "Conquistas",  icon: "🥇", sub: "Seus emblemas" },
-            { href: "/app/colecoes",   label: "Coleções",    icon: "📁", sub: "Organize seus livros" },
+            { href: "/app/campeonato", label: "Campeonatos", Icon: Trophy,     sub: "Compita e ganhe prêmios" },
+            { href: "/app/explore",    label: "Explorar",    Icon: Search,     sub: "Descubra leitores" },
+            { href: "/app/conquistas", label: "Conquistas",  Icon: Award,      sub: "Seus emblemas" },
+            { href: "/app/colecoes",   label: "Coleções",    Icon: FolderOpen, sub: "Organize seus livros" },
           ].map((it) => (
             <Link key={it.href} href={it.href}>
               <div className="flex items-center gap-3 rounded-2xl border border-white/5 bg-surface p-4 active:scale-95 transition-transform">
-                <span className="text-2xl">{it.icon}</span>
+                <it.Icon size={24} className="text-primary shrink-0" strokeWidth={1.5} />
                 <div className="min-w-0">
                   <p className="text-sm font-bold text-on-surface">{it.label}</p>
                   <p className="text-xs text-on-surface/50">{it.sub}</p>
@@ -476,10 +478,11 @@ export default function DashboardPage() {
                       {post.author?.full_name || post.author?.username || "Leitor"}
                     </p>
                     <p className="line-clamp-2 text-sm text-on-surface-muted">
-                      {post.has_spoiler ? "⚠️ Contém spoiler" : post.content}
+                      {post.has_spoiler ? "— Contém spoiler" : post.content}
                     </p>
-                    <p className="mt-1 text-xs text-on-surface-muted">
-                      ❤️ {post.likes_count}
+                    <p className="mt-1 flex items-center gap-1 text-xs text-on-surface-muted">
+                      <Heart size={11} className="fill-red-400 text-red-400" />
+                      {post.likes_count}
                     </p>
                   </div>
                 </div>
