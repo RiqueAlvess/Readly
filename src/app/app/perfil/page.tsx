@@ -9,6 +9,7 @@ import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
 import { getRankForXP, rankProgress } from "@/lib/constants";
 import { formatXP } from "@/lib/utils/format";
+import { BookCheck, FileText, Star, PenLine } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Modal } from "@/components/ui/Modal";
@@ -270,26 +271,34 @@ export default function PerfilPage() {
       {/* stats bento */}
       <div className="grid grid-cols-2 gap-3">
         <Card className="text-center">
-          <div className="text-2xl">📚</div>
+          <div className="flex justify-center mb-1">
+            <BookCheck size={28} className="text-primary" strokeWidth={1.5} />
+          </div>
           <div className="font-display text-2xl font-bold">{stats.booksRead}</div>
           <div className="text-xs text-on-surface-muted">Livros lidos</div>
         </Card>
         <Card className="text-center">
-          <div className="text-2xl">📄</div>
+          <div className="flex justify-center mb-1">
+            <FileText size={28} className="text-primary" strokeWidth={1.5} />
+          </div>
           <div className="font-display text-2xl font-bold">
             {formatXP(stats.pagesRead)}
           </div>
           <div className="text-xs text-on-surface-muted">Páginas lidas</div>
         </Card>
         <Card className="text-center">
-          <div className="text-2xl">⭐</div>
+          <div className="flex justify-center mb-1">
+            <Star size={28} className="text-primary" strokeWidth={1.5} />
+          </div>
           <div className="font-display text-2xl font-bold">
             {stats.avgRating != null ? stats.avgRating.toFixed(1) : "—"}
           </div>
           <div className="text-xs text-on-surface-muted">Nota média</div>
         </Card>
         <Card className="text-center">
-          <div className="text-2xl">📝</div>
+          <div className="flex justify-center mb-1">
+            <PenLine size={28} className="text-primary" strokeWidth={1.5} />
+          </div>
           <div className="font-display text-2xl font-bold">{stats.notes}</div>
           <div className="text-xs text-on-surface-muted">Anotações</div>
         </Card>

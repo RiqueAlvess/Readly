@@ -6,7 +6,7 @@ export function AchievementCard({ badge, name }: { badge: Badge; name: string })
       style={{
         width: 320,
         height: 400,
-        background: "linear-gradient(160deg, #2C3D33, #1F2D26)",
+        background: "linear-gradient(160deg, #3E2D31, #2D1F23)",
         borderRadius: 28,
         padding: 28,
         color: "#F7EAE6",
@@ -22,7 +22,7 @@ export function AchievementCard({ badge, name }: { badge: Badge; name: string })
           CONQUISTA DESBLOQUEADA
         </div>
         <div style={{ fontSize: 96, margin: "12px 0" }}>{badge.icon}</div>
-        <div style={{ fontSize: 26, fontWeight: 800, color: "#D4A89C" }}>
+        <div style={{ fontSize: 26, fontWeight: 800, color: "#98BDA8" }}>
           {badge.name}
         </div>
         <div style={{ fontSize: 14, opacity: 0.8, marginTop: 6 }}>

@@ -9,23 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#1F2D26",
-        surface: "#24332B",
-        "surface-light": "#2C3D33",
-        "surface-dark": "#192319",
+        background: "#2D1F23",
+        surface: "#332428",
+        "surface-light": "#3E2D31",
+        "surface-dark": "#21171A",
         "on-background": "#F7EAE6",
         "on-surface": "#F7EAE6",
-        "on-surface-muted": "#A9B8AE",
-        primary: "#D4A89C",
-        "primary-container": "#F7EAE6",
-        "on-primary": "#1F2D26",
+        "on-surface-muted": "#B8AEB2",
+        primary: "#98BDA8",
+        "primary-container": "#D4EAD8",
+        "on-primary": "#1A2A20",
         secondary: "#F7EAE6",
         "rose-gold": "#D4A89C",
         "rosa-blush": "#F7EAE6",
-        "glass-surface": "rgba(31, 45, 38, 0.8)",
+        "glass-surface": "rgba(45, 31, 35, 0.8)",
         "xp-gold": "#D4A89C",
         // rank colors
-        "rank-calouro": "#A9B8AE",
+        "rank-calouro": "#B8AEB2",
         "rank-comum": "#8FB98F",
         "rank-devorador": "#6FA8DC",
         "rank-rato": "#B07FD4",
@@ -49,7 +49,7 @@ const config: Config = {
         neu: "6px 6px 12px rgba(0,0,0,0.35), -6px -6px 12px rgba(255,255,255,0.03)",
         "neu-inset": "inset 4px 4px 8px rgba(0,0,0,0.35), inset -4px -4px 8px rgba(255,255,255,0.03)",
         "neu-sm": "3px 3px 6px rgba(0,0,0,0.3), -3px -3px 6px rgba(255,255,255,0.03)",
-        glow: "0 0 20px rgba(212,168,156,0.45)",
+        glow: "0 0 20px rgba(152,189,168,0.45)",
       },
       keyframes: {
         "fade-in": {
@@ -77,8 +77,8 @@ const config: Config = {
           "100%": { transform: "scale(1) rotate(0)", opacity: "1" },
         },
         "pulse-glow": {
-          "0%,100%": { boxShadow: "0 0 14px rgba(212,168,156,0.4)" },
-          "50%": { boxShadow: "0 0 28px rgba(212,168,156,0.8)" },
+          "0%,100%": { boxShadow: "0 0 14px rgba(152,189,168,0.4)" },
+          "50%": { boxShadow: "0 0 28px rgba(152,189,168,0.8)" },
         },
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },

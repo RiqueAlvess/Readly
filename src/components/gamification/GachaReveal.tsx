@@ -32,7 +32,7 @@ export function GachaReveal({ open, onClose, book, rarity }: Props) {
     <Modal open={open} onClose={onClose} className="text-center">
       {phase === "shaking" || !book ? (
         <div className="flex flex-col items-center gap-6 py-10">
-          <div className="animate-gacha-shake text-8xl drop-shadow-[0_0_30px_rgba(212,168,156,0.7)]">
+          <div className="animate-gacha-shake text-8xl drop-shadow-[0_0_30px_rgba(152,189,168,0.7)]">
             🎁
           </div>
           <p className="animate-pulse font-display text-lg text-on-surface-muted">
