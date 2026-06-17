@@ -12,7 +12,7 @@ export function BookFinishedCard({
       style={{
         width: 320,
         height: 400,
-        background: "linear-gradient(160deg, #24332B, #192319)",
+        background: "linear-gradient(160deg, #332428, #21171A)",
         borderRadius: 28,
         padding: 28,
         color: "#F7EAE6",
@@ -26,7 +26,7 @@ export function BookFinishedCard({
       <div style={{ textAlign: "center" }}>
         <div style={{ fontSize: 72 }}>📚</div>
         <div style={{ fontSize: 20, opacity: 0.85 }}>Acabei de ler</div>
-        <div style={{ fontSize: 64, fontWeight: 800, color: "#D4A89C" }}>
+        <div style={{ fontSize: 64, fontWeight: 800, color: "#98BDA8" }}>
           {count}
         </div>
         <div style={{ fontSize: 20, opacity: 0.85 }}>
