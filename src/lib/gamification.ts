@@ -2,6 +2,18 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { XP_ACTIONS, XPActionType, getRankForXP, RARITY } from "./constants";
 import type { Book, RarityTier } from "@/types";
 
+/** Fire-and-forget badge check after any qualifying action. */
+export function checkBadges(supabase: SupabaseClient, userId: string) {
+  void supabase.rpc("check_and_award_badges", { p_user_id: userId });
+}
+
+/** Check and reset monthly purchase counter if a new month started. */
+export async function resetMonthlyLimitIfNeeded(supabase: SupabaseClient, userId: string) {
+  try {
+    await supabase.rpc("reset_monthly_purchases_if_needed", { p_user_id: userId });
+  } catch {}
+}
+
 /**
  * Award XP to a user. Records a transaction, increments profile.xp and
  * recomputes rank. Returns the new total XP, or null on failure.

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
-import { awardXP } from "@/lib/gamification";
+import { awardXP, checkBadges } from "@/lib/gamification";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Modal } from "@/components/ui/Modal";
@@ -172,6 +172,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
 
       if (next === "read") {
         await awardXP(supabase as any, userId, "book_read", bookId);
+        checkBadges(supabase as any, userId);
         await reload();
         setReadCount((c) => c + 1);
         toast("Livro concluído! +100 XP 🎉", "xp");
@@ -260,6 +261,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
 
       if (!hadText && hasText) {
         await awardXP(supabase as any, userId, "review_written", bookId);
+        checkBadges(supabase as any, userId);
         await reload();
         toast("Resenha salva! +50 XP ✍️", "xp");
       } else {
@@ -297,6 +299,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
       if (error) throw error;
       setEntries((prev) => [data as DiaryEntry, ...prev]);
       await awardXP(supabase as any, userId, "diary_entry", bookId);
+      checkBadges(supabase as any, userId);
       await reload();
       toast("Entrada adicionada! +25 XP 📖", "xp");
       setDiaryOpen(false);

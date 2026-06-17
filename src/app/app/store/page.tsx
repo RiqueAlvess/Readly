@@ -9,6 +9,8 @@ import {
   changeCredits,
   rollRarity,
   weightedBookPick,
+  checkBadges,
+  resetMonthlyLimitIfNeeded,
 } from "@/lib/gamification";
 import { RARITY } from "@/lib/constants";
 import { timeAgo } from "@/lib/utils/format";
@@ -192,6 +194,22 @@ export default function StorePage() {
     if (!profile) return;
     setOpening(lb.id);
     try {
+      // Check and reset monthly limit if new month
+      await resetMonthlyLimitIfNeeded(supabase as any, profile.id);
+
+      // Enforce monthly purchase limit (10 per month by default)
+      const { data: currentProfile } = await supabase
+        .from("profiles")
+        .select("monthly_books_purchased, monthly_book_limit")
+        .eq("id", profile.id)
+        .single();
+      const purchased = currentProfile?.monthly_books_purchased ?? 0;
+      const limit = currentProfile?.monthly_book_limit ?? 10;
+      if (purchased >= limit) {
+        toast(`Limite mensal de ${limit} caixas atingido. Reinicia no início do próximo mês.`, "error");
+        return;
+      }
+
       const balance = await changeCredits(
         supabase as any,
         profile.id,
@@ -239,6 +257,14 @@ export default function StorePage() {
         is_downloaded: false,
       });
       if (invErr) throw invErr;
+
+      // Increment monthly purchase counter
+      await supabase
+        .from("profiles")
+        .update({ monthly_books_purchased: purchased + 1 })
+        .eq("id", profile.id);
+
+      checkBadges(supabase as any, profile.id);
 
       setRevealBook(picked);
       setRevealRarity(finalRarity);

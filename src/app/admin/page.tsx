@@ -8,6 +8,7 @@ import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useToast } from "@/lib/hooks/useToast";
 import { changeCredits } from "@/lib/gamification";
 import { GENRES } from "@/lib/constants";
+import { timeAgo } from "@/lib/utils/format";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Modal } from "@/components/ui/Modal";
@@ -19,9 +20,10 @@ import type {
   LootboxType,
   Profile,
   RarityTier,
+  UserBookSubmission,
 } from "@/types";
 
-type Section = "books" | "championships" | "lootboxes" | "stats" | "users";
+type Section = "books" | "championships" | "lootboxes" | "stats" | "users" | "badges" | "submissoes";
 
 interface Stats {
   users: number;
@@ -78,6 +80,10 @@ export default function AdminPage() {
   const [lootboxes, setLootboxes] = useState<LootboxType[]>([]);
   const [users, setUsers] = useState<Profile[]>([]);
   const [stats, setStats] = useState<Stats>({ users: 0, books: 0, posts: 0, totalXP: 0 });
+  const [badgeList, setBadgeList] = useState<{ id: string; name: string; description: string; icon: string; condition_type: string; condition_value: number }[]>([]);
+  const [submissions, setSubmissions] = useState<UserBookSubmission[]>([]);
+  const [subStatusInputs, setSubStatusInputs] = useState<Record<string, string>>({});
+  const [subExpiresInputs, setSubExpiresInputs] = useState<Record<string, string>>({});
 
   // book form
   const [bookModal, setBookModal] = useState(false);
@@ -95,6 +101,10 @@ export default function AdminPage() {
 
   const [busy, setBusy] = useState<string | null>(null);
   const [creditInputs, setCreditInputs] = useState<Record<string, string>>({});
+
+  // badge form
+  const [badgeForm, setBadgeForm] = useState({ name: "", description: "", icon: "🏅", condition_type: "books_read", condition_value: "1" });
+  const [savingBadge, setSavingBadge] = useState(false);
 
   // ---- Auth/admin guard ----
   useEffect(() => {
@@ -131,6 +141,8 @@ export default function AdminPage() {
         bookCount,
         postCount,
         xpRes,
+        badgesRes,
+        subsRes,
       ] = await Promise.all([
         supabase.from("books").select("*").order("created_at", { ascending: false }),
         supabase.from("championships").select("*").order("start_date", { ascending: false }),
@@ -144,6 +156,11 @@ export default function AdminPage() {
         supabase.from("books").select("id", { count: "exact", head: true }),
         supabase.from("posts").select("id", { count: "exact", head: true }),
         supabase.from("profiles").select("xp"),
+        supabase.from("badges").select("*").order("condition_value", { ascending: true }),
+        supabase
+          .from("user_book_submissions")
+          .select("*")
+          .order("created_at", { ascending: false }),
       ]);
       if (booksRes.error) throw booksRes.error;
       if (champsRes.error) throw champsRes.error;
@@ -154,6 +171,8 @@ export default function AdminPage() {
       setChamps((champsRes.data as Championship[]) ?? []);
       setLootboxes((lootRes.data as LootboxType[]) ?? []);
       setUsers((usersRes.data as Profile[]) ?? []);
+      setBadgeList((badgesRes.data as any[]) ?? []);
+      setSubmissions((subsRes.data as UserBookSubmission[]) ?? []);
 
       const totalXP = ((xpRes.data as { xp: number }[]) ?? []).reduce(
         (s, r) => s + (r.xp || 0),
@@ -363,12 +382,118 @@ export default function AdminPage() {
     }
   }
 
+  // ---- Subscription management ----
+  async function updateSubscription(u: Profile) {
+    const newStatus = subStatusInputs[u.id];
+    const newExpires = subExpiresInputs[u.id];
+    if (!newStatus) {
+      toast("Selecione um status.", "error");
+      return;
+    }
+    setBusy(u.id);
+    try {
+      const update: Record<string, any> = { subscription_status: newStatus };
+      if (newExpires) update.subscription_expires_at = new Date(newExpires).toISOString();
+      const { error } = await supabase.from("profiles").update(update).eq("id", u.id);
+      if (error) throw error;
+      setUsers((prev) =>
+        prev.map((x) =>
+          x.id === u.id ? { ...x, subscription_status: newStatus as any } : x
+        )
+      );
+      toast("Assinatura atualizada!", "success");
+    } catch (e: any) {
+      toast(e.message || "Erro ao atualizar assinatura.", "error");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  // ---- Badge management ----
+  async function saveBadge() {
+    if (!badgeForm.name.trim()) {
+      toast("Nome é obrigatório.", "error");
+      return;
+    }
+    setSavingBadge(true);
+    try {
+      const { error } = await supabase.from("badges").insert({
+        name: badgeForm.name.trim(),
+        description: badgeForm.description.trim() || badgeForm.name.trim(),
+        icon: badgeForm.icon || "🏅",
+        condition_type: badgeForm.condition_type,
+        condition_value: Number(badgeForm.condition_value) || 1,
+      });
+      if (error) throw error;
+      toast("Emblema criado!", "success");
+      setBadgeForm({ name: "", description: "", icon: "🏅", condition_type: "books_read", condition_value: "1" });
+      await loadAll();
+    } catch (e: any) {
+      toast(e.message || "Erro ao criar emblema.", "error");
+    } finally {
+      setSavingBadge(false);
+    }
+  }
+
+  async function deleteBadge(id: string) {
+    if (!confirm("Excluir este emblema?")) return;
+    setBusy(id);
+    try {
+      const { error } = await supabase.from("badges").delete().eq("id", id);
+      if (error) throw error;
+      toast("Emblema excluído.", "info");
+      await loadAll();
+    } catch (e: any) {
+      toast(e.message || "Erro ao excluir.", "error");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  // ---- Submission review ----
+  async function reviewSubmission(sub: UserBookSubmission, status: "approved" | "rejected", note?: string) {
+    setBusy(sub.id);
+    try {
+      const { error } = await supabase
+        .from("user_book_submissions")
+        .update({ status, admin_note: note ?? null, reviewed_at: new Date().toISOString() })
+        .eq("id", sub.id);
+      if (error) throw error;
+      if (status === "approved") {
+        // Auto-add the book to the catalog
+        await supabase.from("books").insert({
+          title: sub.title,
+          author: sub.author,
+          cover_url: sub.cover_url,
+          description: sub.description,
+          genre: sub.genre,
+          isbn: sub.isbn,
+          page_count: sub.page_count,
+          published_year: sub.published_year,
+          rarity_tier: "common",
+          gacha_weight: 100,
+          price_credits: 50,
+        });
+        toast("Livro aprovado e adicionado ao catálogo!", "success");
+      } else {
+        toast("Submissão rejeitada.", "info");
+      }
+      await loadAll();
+    } catch (e: any) {
+      toast(e.message || "Erro ao revisar.", "error");
+    } finally {
+      setBusy(null);
+    }
+  }
+
   if (!authChecked) return <FullPageSpinner />;
 
   const sections: { key: Section; label: string }[] = [
     { key: "books", label: "Livros" },
     { key: "championships", label: "Campeonatos" },
     { key: "lootboxes", label: "Caixas" },
+    { key: "badges", label: "Emblemas" },
+    { key: "submissoes", label: "Submissões" },
     { key: "stats", label: "Stats" },
     { key: "users", label: "Usuários" },
   ];
@@ -674,6 +799,9 @@ export default function AdminPage() {
                         <p className="text-xs text-on-surface-muted">
                           ⚡{u.xp.toLocaleString("pt-BR")} XP · 💰{u.credits}
                         </p>
+                        <p className="text-xs text-on-surface-muted">
+                          Assinatura: <span className="font-semibold">{u.subscription_status}</span>
+                        </p>
                       </div>
                       <Button
                         size="sm"
@@ -705,8 +833,187 @@ export default function AdminPage() {
                         Conceder
                       </Button>
                     </div>
+                    {/* Subscription management */}
+                    <div className="flex gap-2">
+                      <select
+                        className={input}
+                        value={subStatusInputs[u.id] ?? u.subscription_status}
+                        onChange={(e) =>
+                          setSubStatusInputs((prev) => ({ ...prev, [u.id]: e.target.value }))
+                        }
+                      >
+                        <option value="trial">Trial</option>
+                        <option value="active">Ativa</option>
+                        <option value="inactive">Inativa</option>
+                        <option value="expired">Expirada</option>
+                      </select>
+                      <input
+                        type="date"
+                        className={input}
+                        placeholder="Expira em"
+                        value={subExpiresInputs[u.id] ?? ""}
+                        onChange={(e) =>
+                          setSubExpiresInputs((prev) => ({ ...prev, [u.id]: e.target.value }))
+                        }
+                      />
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        disabled={busy === u.id}
+                        onClick={() => updateSubscription(u)}
+                      >
+                        Salvar
+                      </Button>
+                    </div>
                   </Card>
                 ))}
+              </div>
+            )}
+
+            {/* BADGES */}
+            {section === "badges" && (
+              <div className="space-y-4">
+                <Card className="space-y-3">
+                  <h2 className="font-display text-lg font-bold">Novo emblema</h2>
+                  <div className="flex gap-2">
+                    <input
+                      className={input}
+                      placeholder="Ícone (emoji)"
+                      value={badgeForm.icon}
+                      onChange={(e) => setBadgeForm({ ...badgeForm, icon: e.target.value })}
+                    />
+                    <input
+                      className={input}
+                      placeholder="Nome *"
+                      value={badgeForm.name}
+                      onChange={(e) => setBadgeForm({ ...badgeForm, name: e.target.value })}
+                    />
+                  </div>
+                  <input
+                    className={input}
+                    placeholder="Descrição"
+                    value={badgeForm.description}
+                    onChange={(e) => setBadgeForm({ ...badgeForm, description: e.target.value })}
+                  />
+                  <div className="flex gap-2">
+                    <select
+                      className={input}
+                      value={badgeForm.condition_type}
+                      onChange={(e) => setBadgeForm({ ...badgeForm, condition_type: e.target.value })}
+                    >
+                      <option value="books_read">Livros lidos</option>
+                      <option value="xp">XP total</option>
+                      <option value="streak">Streak (dias)</option>
+                      <option value="reviews">Resenhas</option>
+                      <option value="posts">Posts</option>
+                      <option value="gacha">Caixas abertas</option>
+                      <option value="collections">Coleções</option>
+                      <option value="followers">Seguidores</option>
+                      <option value="pages_read">Páginas lidas</option>
+                      <option value="diary">Entradas no diário</option>
+                    </select>
+                    <input
+                      type="number"
+                      className={input}
+                      placeholder="Valor"
+                      value={badgeForm.condition_value}
+                      onChange={(e) => setBadgeForm({ ...badgeForm, condition_value: e.target.value })}
+                    />
+                  </div>
+                  <Button loading={savingBadge} onClick={saveBadge}>
+                    Criar emblema
+                  </Button>
+                </Card>
+
+                <h2 className="font-display text-lg font-bold">
+                  Emblemas ({badgeList.length})
+                </h2>
+                {badgeList.map((b) => (
+                  <Card key={b.id} className="flex items-center gap-3">
+                    <span className="text-2xl shrink-0">{b.icon}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-bold">{b.name}</p>
+                      <p className="truncate text-xs text-on-surface-muted">
+                        {b.condition_type} ≥ {b.condition_value}
+                      </p>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      loading={busy === b.id}
+                      onClick={() => deleteBadge(b.id)}
+                    >
+                      Excluir
+                    </Button>
+                  </Card>
+                ))}
+              </div>
+            )}
+
+            {/* SUBMISSIONS */}
+            {section === "submissoes" && (
+              <div className="space-y-3">
+                <h2 className="font-display text-lg font-bold">
+                  Submissões ({submissions.length})
+                </h2>
+                {submissions.length === 0 ? (
+                  <Card className="text-center text-sm text-on-surface-muted">
+                    Nenhuma submissão pendente.
+                  </Card>
+                ) : (
+                  submissions.map((s) => (
+                    <Card key={s.id} className="space-y-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="truncate font-bold">{s.title}</p>
+                          <p className="truncate text-sm text-on-surface-muted">{s.author}</p>
+                          {s.genre && (
+                            <p className="text-xs text-on-surface-muted">{s.genre}</p>
+                          )}
+                        </div>
+                        <span
+                          className={
+                            "shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold " +
+                            (s.status === "pending"
+                              ? "bg-amber-500/20 text-amber-400"
+                              : s.status === "approved"
+                              ? "bg-green-500/20 text-green-400"
+                              : "bg-red-500/20 text-red-400")
+                          }
+                        >
+                          {s.status === "pending" ? "Pendente" : s.status === "approved" ? "Aprovado" : "Rejeitado"}
+                        </span>
+                      </div>
+                      {s.description && (
+                        <p className="text-xs text-on-surface-muted line-clamp-2">
+                          {s.description}
+                        </p>
+                      )}
+                      <p className="text-xs text-on-surface-muted">
+                        Enviado {timeAgo(s.created_at)}
+                      </p>
+                      {s.status === "pending" && (
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            loading={busy === s.id}
+                            onClick={() => reviewSubmission(s, "approved")}
+                          >
+                            Aprovar
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="danger"
+                            disabled={busy === s.id}
+                            onClick={() => reviewSubmission(s, "rejected", "Não atende aos critérios do catálogo.")}
+                          >
+                            Rejeitar
+                          </Button>
+                        </div>
+                      )}
+                    </Card>
+                  ))
+                )}
               </div>
             )}
           </>
