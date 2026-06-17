@@ -24,7 +24,7 @@ export function BottomNav() {
       <div
         className="mb-3 flex w-full max-w-lg items-center justify-around rounded-[28px] px-2 py-2"
         style={{
-          background: "rgba(45, 21, 37, 0.92)",
+          background: "rgba(24, 12, 18, 0.92)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           border: "1px solid rgba(255,255,255,0.08)",

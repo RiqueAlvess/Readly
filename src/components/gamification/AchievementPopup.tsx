@@ -18,7 +18,7 @@ export function AchievementPopup({ open, onClose, badge }: Props) {
         <p className="text-sm uppercase tracking-widest text-primary">
           Conquista desbloqueada
         </p>
-        <div className="animate-gacha-reveal text-7xl drop-shadow-[0_0_24px_rgba(152,189,168,0.7)]">
+        <div className="animate-gacha-reveal text-7xl drop-shadow-[0_0_24px_rgba(255,193,213,0.7)]">
           {badge.icon}
         </div>
         <h3 className="font-display text-2xl font-bold">{badge.name}</h3>

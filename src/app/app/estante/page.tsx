@@ -214,7 +214,7 @@ export default function EstantePage() {
       <button
         onClick={() => setModalOpen(true)}
         className="fixed bottom-36 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-on-primary shadow-lg active:scale-95 transition-transform"
-        style={{ boxShadow: "0 4px 24px rgba(152,189,168,0.4)" }}
+        style={{ boxShadow: "0 4px 24px rgba(255,193,213,0.4)" }}
         aria-label="Adicionar livro"
       >
         <Plus size={24} strokeWidth={2.5} />

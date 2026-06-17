@@ -8,10 +8,10 @@ export function RankCard({ xp, name }: { xp: number; name: string }) {
       style={{
         width: 320,
         height: 400,
-        background: "linear-gradient(160deg, #332428, #2D1F23)",
+        background: "linear-gradient(160deg, #2C1523, #180C12)",
         borderRadius: 28,
         padding: 28,
-        color: "#F7EAE6",
+        color: "#FDEEF3",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -27,7 +27,7 @@ export function RankCard({ xp, name }: { xp: number; name: string }) {
         <div style={{ fontSize: 16, opacity: 0.8 }}>{name}</div>
       </div>
       <div>
-        <div style={{ fontSize: 22, fontWeight: 800, color: "#98BDA8" }}>
+        <div style={{ fontSize: 22, fontWeight: 800, color: "#FFC1D5" }}>
           {formatXP(xp)} XP
         </div>
         <div
@@ -43,7 +43,7 @@ export function RankCard({ xp, name }: { xp: number; name: string }) {
               width: `${pct}%`,
               height: "100%",
               borderRadius: 999,
-              background: "#98BDA8",
+              background: "#FFC1D5",
             }}
           />
         </div>
