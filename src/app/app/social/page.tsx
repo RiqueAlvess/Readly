@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getSupabaseBrowser } from "@/lib/supabase/client";
 import { useProfileContext } from "@/lib/hooks/profileContext";
 import { useToast } from "@/lib/hooks/useToast";
-import { awardXP } from "@/lib/gamification";
+import { awardXP, checkBadges } from "@/lib/gamification";
 import { getRankForXP } from "@/lib/constants";
 import { timeAgo } from "@/lib/utils/format";
 import { Button } from "@/components/ui/Button";
@@ -316,6 +316,7 @@ export default function SocialPage() {
       });
       if (error) throw error;
       await awardXP(supabase as any, profile.id, "post_published");
+      checkBadges(supabase as any, profile.id);
       await reload();
       toast("Publicado!", "success");
       setComposerOpen(false);

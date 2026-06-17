@@ -208,3 +208,31 @@ export interface ReadingGoal {
   month: number | null;
   created_at: string;
 }
+
+export interface UserBookSubmission {
+  id: string;
+  user_id: string;
+  title: string;
+  author: string;
+  cover_url: string | null;
+  description: string | null;
+  genre: string | null;
+  isbn: string | null;
+  page_count: number | null;
+  published_year: number | null;
+  status: "pending" | "approved" | "rejected";
+  admin_note: string | null;
+  created_at: string;
+  reviewed_at: string | null;
+}
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type: string;
+  title: string;
+  body: string | null;
+  link: string | null;
+  is_read: boolean;
+  created_at: string;
+}

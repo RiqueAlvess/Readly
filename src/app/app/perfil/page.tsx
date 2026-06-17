@@ -388,6 +388,14 @@ export default function PerfilPage() {
         </Link>
       </Card>
 
+      {/* suggest book */}
+      <Link href="/app/submissoes">
+        <Button variant="secondary" fullWidth>
+          <BookCheck size={16} strokeWidth={2} />
+          Sugerir livro ao catálogo
+        </Button>
+      </Link>
+
       {/* share */}
       <Button variant="secondary" fullWidth onClick={() => setShareOpen(true)}>
         <Share2 size={16} strokeWidth={2} />
